@@ -2,15 +2,15 @@ package models.pairs;
 
 import java.util.ArrayList;
 
-public class IdContactNamePair implements Comparable<IdContactNamePair> {
+public class IdAndContactNamePair implements Comparable<IdAndContactNamePair> {
     private String contactName;
     private final int id;
     private static final ArrayList<Integer> ID_LIST = new ArrayList<>();
 
-    public IdContactNamePair(String contactName) {
+    public IdAndContactNamePair(String contactName) {
         this.contactName = contactName;
         addElementToIdList();
-        this.id = ID_LIST.get(ID_LIST.size() - 1);
+        this.id = getLastElementOfIdList();
     }
 
     public String getContactName() {
@@ -27,16 +27,28 @@ public class IdContactNamePair implements Comparable<IdContactNamePair> {
 
     private void addElementToIdList() {
         int size = ID_LIST.size();
-        if (size == 0) {
-            ID_LIST.add(1);
-        } else {
+        if (size > 0) {
             int lastElement = ID_LIST.get(size - 1);
             ID_LIST.add(lastElement + 1);
+        } else {
+            ID_LIST.add(1);
         }
     }
 
+    private int getLastElementOfIdList() {
+        int size = ID_LIST.size();
+        return ID_LIST.get(size - 1);
+    }
+
     @Override
-    public int compareTo(IdContactNamePair o) {
-        return this.contactName.compareTo(o.contactName);
+    public String toString() {
+        return id + ". " + contactName;
+    }
+
+    @Override
+    public int compareTo(IdAndContactNamePair o) {
+        return this.contactName.compareTo(o.contactName) != 0 ?
+                this.contactName.compareTo(o.contactName) :
+                (this.id - o.id);
     }
 }
