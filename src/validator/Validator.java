@@ -16,6 +16,7 @@ public class Validator {
             return (choice>=min && choice<=max);
     }
 
+    private Validator(){}
     public static boolean isValidContactName(String contactName) {
         Matcher matcher = VALID_NAME_PATTERN.matcher(contactName);
         return matcher.matches();

@@ -15,37 +15,37 @@ public class Loader {
         showMenu();
 
         Scanner scanner = new Scanner(System.in);
-        String choice = "-1";
+        int choice=0;
 
         while (true) {
-            while (!isValidChoice(choice)) {
+            while (!isValidChoice(1,2,3)) {
                 System.out.print("Enter your choice: ");
-                choice = scanner.nextLine();
+                choice = scanner.nextInt();
             }
 
             ContactService contactService = new ContactService();
 
             switch (choice) {
-                case "1":
+                case 1:
                     contactService.create();
                     break;
-                case "2":
+                case 2:
                     contactService.search("aaaaa");
                     break;
-                case "3":
+                case 3:
                     contactService.update();
                     break;
-                case "4":
+                case 4:
                     contactService.delete();
                     break;
-                case "5":
+                case 5:
                     TreeMap<IdContactNamePair, Contact> contacts = PhoneBookDB.getContacts();
                     showContacts(contacts);
                     break;
-                case "9":
+                case 6:
                     showMenu();
                     break;
-                case "0":
+                case 0:
                     System.exit(0);
             }
         }
