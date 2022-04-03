@@ -1,10 +1,15 @@
 package service;
 
+import contacts.PhoneBookDB;
 import models.Contact;
 import models.EmailType;
 import models.PhoneNumberType;
 import models.pairs.IdAndContactNamePair;
+import models.pairs.PhoneNumberTypeAndPhoneNumberPair;
 
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static validator.GetValidInputs.*;
@@ -73,6 +78,27 @@ public class ContactService {
 
     }
 
+    public TreeMap<IdAndContactNamePair, Contact> search2() {
+        while (true) {
+            showActionsListForSearch();
+            int searchChoice = validChoice(0, 4);
+            if (searchChoice == 0) {
+                return null;
+            }
+            String searchValue = validSearchValue();
+            switch (searchChoice) {
+                case 1:
+                    return searchInContactsByName(searchValue);
+                case 2:
+                    return searchInContactsByPhoneNumber(searchValue);
+                case 3:
+                    return searchInContactsByEmail(searchValue);
+                case 4:
+                    return searchInContactsByCompanyName(searchValue);
+            }
+        }
+    }
+
     public void update() {
 
     }
@@ -85,9 +111,63 @@ public class ContactService {
                 "0. To save contact.");
     }
 
+
+    private void showActionsListForDelete() {
+        System.out.println("\nEnter the appropriate line number of the action you want to perform:\n" +
+                "1. To delete contact by name.\n" +
+                "2. To delete contact by phone number label and phone number.\n" +
+                "3. To delete contact by email label and email.\n" +
+                "4. To delete contact by company name.\n" +
+                "0. To delete all contacts.");
+    }
+
     public void delete() {
+        showActionsListForDelete();
+        String deleteValue;
+        int deleteChoice = validChoice(0, 4);
+        Integer i = 0;
+        TreeMap<IdAndContactNamePair, Contact> contacts;
+        int deleteChoiceFromSearchResult;
+        switch (deleteChoice) {
+            case 0:
+                PhoneBookDB.getContacts().clear();
+                break;
+            case 1:
+                deleteValue = validContactName();
+                contacts = PhoneBookDB.searchInContactsByName(deleteValue);
+                deleteChoice=validChoice(1, contacts.size());
+                TreeMap<Integer,PhoneBookDB> idPhoneBookDBTreeMapPair = null;
+                System.out.println((++i) + ". " + contacts.toString());
+                for (Map.Entry<IdAndContactNamePair, Contact> entry : contacts.entrySet()) {
+                    if (entry.getKey().getContactName().equals(deleteValue)) {
+                        for (Map.Entry<Integer,PhoneBookDB> entry1:idPhoneBookDBTreeMapPair.entrySet()){
+                            idPhoneBookDBTreeMapPair.entrySet().contains(deleteValue);
+                        }
+                        PhoneBookDB.getContacts().remove(entry.getKey(), entry.getValue());
+                    }
+                }
+                break;
+            case 2:
+                deleteValue = validPhoneNumber();
+                contacts = PhoneBookDB.searchInContactsByPhoneNumber(deleteValue);
+                String phoneNumber = null;
+                for (Map.Entry<IdAndContactNamePair, Contact> entry : contacts.entrySet()) {
+                    List<PhoneNumberTypeAndPhoneNumberPair> list = entry.getValue().getPhoneNumbers();
+                    ListIterator<PhoneNumberTypeAndPhoneNumberPair> namesIterator = list.listIterator();
+                    while (namesIterator.hasNext()) {
+                        phoneNumber = namesIterator.next().getPhoneNumber();
+                    }
+                    if (phoneNumber.equals(deleteValue)) {
+                        PhoneBookDB.getContacts().remove(entry.getKey(), entry.getValue());
+                    }
+                }
+                break;
+        }
+
 
     }
+    // entry.getValue().getCompanyName().equals(deleteValue) ||
+    //                    entry.getValue().getEmails().equals(deleteValue)
 
     private void showActionsListForCreate() {
         System.out.println("\nEnter the appropriate line number of the action you want to perform:\n" +

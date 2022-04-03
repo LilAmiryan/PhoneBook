@@ -1,6 +1,7 @@
 package contacts;
 
 import models.Contact;
+import models.EmailType;
 import models.pairs.EmailTypeAndEmailPair;
 import models.pairs.IdAndContactNamePair;
 import models.pairs.PhoneNumberTypeAndPhoneNumberPair;
@@ -65,7 +66,11 @@ public class PhoneBookDB {
         return result;
     }
 
-    public static void showAllContacts() {
 
+    public static void showAllContacts() {
+        int number = 0;
+        for (Map.Entry<IdAndContactNamePair, Contact> entry : CONTACTS.entrySet()) {
+            System.out.println(++number + ". Name: " + entry.getKey().getContactName() + "\t" + entry.getValue().toString());
+        }
     }
 }

@@ -19,18 +19,22 @@ public class Loader {
 
             ContactService contactService = new ContactService();
 
+            TreeMap<IdAndContactNamePair, Contact> contacts=new TreeMap<>();
+
             switch (menuChoice) {
                 case 1:
                     String contactName = validContactName();
                     contactService.create(contactName);
                     break;
                 case 2:
+                    System.out.println("For first you need to find and choose contact that you want to update.");
                     contactService.search();
                     break;
                 case 3:
                     contactService.update();
                     break;
                 case 4:
+                    System.out.println("For first you need to find and choose contact that you want to delete.");
                     contactService.delete();
                     break;
                 case 5:
