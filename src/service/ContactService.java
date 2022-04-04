@@ -125,7 +125,7 @@ public class ContactService {
         showActionsListForDelete();
         String deleteValue;
         int deleteChoice = validChoice(0, 4);
-        Integer i = 0;
+        int i = 0;
         TreeMap<IdAndContactNamePair, Contact> contacts;
         int deleteChoiceFromSearchResult;
         switch (deleteChoice) {
@@ -135,15 +135,25 @@ public class ContactService {
             case 1:
                 deleteValue = validContactName();
                 contacts = PhoneBookDB.searchInContactsByName(deleteValue);
-                deleteChoice=validChoice(1, contacts.size());
+
+                for (Map.Entry<IdAndContactNamePair, Contact> entry : contacts.entrySet()) {
+                    System.out.println(++i + ". "+entry.getKey().getContactName());
+                }
+
+
+                deleteChoice=validChoice(1, PhoneBookDB.getContacts().size());
                 TreeMap<Integer,PhoneBookDB> idPhoneBookDBTreeMapPair = null;
-                System.out.println((++i) + ". " + contacts.toString());
+
                 for (Map.Entry<IdAndContactNamePair, Contact> entry : contacts.entrySet()) {
                     if (entry.getKey().getContactName().equals(deleteValue)) {
-                        for (Map.Entry<Integer,PhoneBookDB> entry1:idPhoneBookDBTreeMapPair.entrySet()){
-                            idPhoneBookDBTreeMapPair.entrySet().contains(deleteValue);
-                        }
-                        PhoneBookDB.getContacts().remove(entry.getKey(), entry.getValue());
+                        //idPhoneBookDBTreeMapPair.keySet().add(i);
+
+                       // for (Map.Entry<Integer,PhoneBookDB> entry1:idPhoneBookDBTreeMapPair.entrySet()){
+                            if(entry.getKey().getId()==deleteChoice){
+                                PhoneBookDB.getContacts().remove(entry.getKey(), entry.getValue());
+                            }
+                        //}
+
                     }
                 }
                 break;
